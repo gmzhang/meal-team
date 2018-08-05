@@ -22,4 +22,4 @@ vendor/
 
 .idea/
 .vscode
-config/
+config/config.go
