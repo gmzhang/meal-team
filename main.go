@@ -29,6 +29,13 @@ func webService(useCase usecase.MealTeamUsecase) {
 	e := echo.New()
 	e.Use(middleware.Recover())
 
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		//AllowOrigins:     []string{"http://vote.gmzhang.com"},
+		//AllowMethods:     []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
+		//AllowCredentials: true,
+	}))
+
+
 	dataPath := os.Getenv("DATA_PATH")
 	accessLogFile, err := os.OpenFile(dataPath+"access.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 	if err != nil {
