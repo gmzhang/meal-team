@@ -12,7 +12,7 @@ type MealTeamUsecase interface {
 
 	GetMealTeamALLRestaurant(mealTeamId int) (restaurants []model.MealTeamRestaurantLib, err error)
 
-	UpMealTeamRestaurantId(mealTeamId, restaurantId int) (err error)
+	UpdateMealTeamRestaurantId(mealTeamId, restaurantId int) (err error)
 
 	BroadcastMealTeamMember(mealTeamId int) (err error)
 
@@ -23,4 +23,6 @@ type MealTeamUsecase interface {
 	NotifyMealTeamer(mealTeamId int, openid string) (err error)
 
 	GetMealTeamManagerRunning(mealTeamId int) (running []model.MealTeamManagerRunning, err error)
+
+	GetMealTeamByMemberOpenid(openid string)(mealTeams []model.MealTeam, err error)
 }

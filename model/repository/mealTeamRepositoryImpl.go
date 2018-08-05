@@ -59,7 +59,7 @@ func (m *mealTeamRepository) CreateMealTeam(name, openid, time string) (mealTeam
 func (m *mealTeamRepository) FindMealTeamById(id int) (mealTeam *model.MealTeam, err error) {
 	sqlStr := "select id, name,openid,create_at from meal_team where id=?"
 	mealTeam = &model.MealTeam{}
-	err = m.coon.Select(mealTeam, sqlStr, id)
+	err = m.coon.Get(mealTeam, sqlStr, id)
 	if err == sql.ErrNoRows {
 		err = nil
 	}
@@ -71,9 +71,9 @@ func (m *mealTeamRepository) FindMealTeamById(id int) (mealTeam *model.MealTeam,
 
 func (m *mealTeamRepository) FindMealTeamMemberByMealTeamId(mealTeamId int) (members []model.MealTeamMember, err error) {
 	members = []model.MealTeamMember{}
-	sqlStr := "select id,team_id,restaurant_id,openid,nick,avatar,is_manager,up,down,create_at order by id asc WHERE team_id=?"
+	sqlStr := "select id,team_id,restaurant_id,openid,nick,avatar,is_manager,up,down,create_at FROM meal_team_member WHERE team_id=? order by id asc"
 
-	err = m.coon.Select(members, sqlStr, mealTeamId)
+	err = m.coon.Select(&members, sqlStr, mealTeamId)
 	if err == sql.ErrNoRows {
 		err = nil
 	}
@@ -88,7 +88,7 @@ func (m *mealTeamRepository) FindMealTeamRestaurantById(id int) (restaurant mode
 	restaurant = model.MealTeamRestaurantLib{}
 	sqlStr := "select id,name,create_at from meal_team_restaurant_lib where id=?"
 
-	err = m.coon.Select(restaurant, sqlStr, id)
+	err = m.coon.Get(&restaurant, sqlStr, id)
 	if err == sql.ErrNoRows {
 		err = nil
 	}
@@ -105,7 +105,7 @@ func (m *mealTeamRepository) FindMealTeamRestaurantByMealTeamId(mealTeamId int) 
 
 	sqlStr := "select id, name, create_at from meal_team_restaurant_lib where team_id=?"
 
-	err = m.coon.Select(restaurants, sqlStr, mealTeamId)
+	err = m.coon.Select(&restaurants, sqlStr, mealTeamId)
 	if err == sql.ErrNoRows {
 		err = nil
 	}
@@ -157,13 +157,13 @@ func (m *mealTeamRepository) FindMealTeamManagerRunningByMealTeamId(mealTeamId i
 
 	sqlStr := "select id, team_id, restaurant_id,openid,nick,avatar,up,down,create_at from meal_team_manager_running where team_id=?"
 
-	err = m.coon.Select(running, sqlStr, mealTeamId)
+	err = m.coon.Select(&running, sqlStr, mealTeamId)
 	if err == sql.ErrNoRows {
 		err = nil
 	}
 
 	if err != nil {
-		logrus.WithError(err).WithField("mealTeamId", mealTeamId).Error("select meal team restaurant error")
+		logrus.WithError(err).WithField("mealTeamId", mealTeamId).Error("select meal_team_manager_running error")
 	}
 	return
 }
@@ -221,4 +221,20 @@ func (m *mealTeamRepository) CreateMealTeamNotify(mealTeamId int, openid string,
 		return err
 	}
 	return
+}
+
+func (m *mealTeamRepository) GetMealTeamIdsByOpenid(openid string) (mealTeamIds []int, err error) {
+
+	sqlStr := "select team_id FROM meal_team_member WHERE openid=? order by id asc"
+
+	mealTeamIds = []int{}
+	err = m.coon.Select(&mealTeamIds, sqlStr, openid)
+	if err == sql.ErrNoRows {
+		err = nil
+	}
+	if err != nil {
+		logrus.WithError(err).WithField("openid", openid).Error("select team_id from meal_team_member by openid error")
+	}
+	return
+
 }

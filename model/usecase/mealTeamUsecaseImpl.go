@@ -27,8 +27,13 @@ func (m *mealTeamUsecase) Create(name, openid string) (mealTeam *model.MealTeam,
 		return nil, model.ErrInvalidParam
 	}
 
-	mealTeam = &model.MealTeam{}
-	id, err := m.repo.CreateMealTeam(name, openid, time.Now().Format(time.RFC3339))
+	create_at := time.Now()
+	mealTeam = &model.MealTeam{
+		Name:     name,
+		Openid:   openid,
+		CreateAt: create_at,
+	}
+	id, err := m.repo.CreateMealTeam(name, openid, create_at.Format(time.RFC3339))
 
 	if err != nil {
 		return nil, model.ErrCreateMealTeam
@@ -81,7 +86,7 @@ func (m *mealTeamUsecase) GetMealTeamALLRestaurant(mealTeamId int) (restaurants 
 	return
 }
 
-func (m *mealTeamUsecase) UpMealTeamRestaurantId(mealTeamId, restaurantId int) (err error) {
+func (m *mealTeamUsecase) UpdateMealTeamRestaurantId(mealTeamId, restaurantId int) (err error) {
 	if mealTeamId <= 0 || restaurantId <= 0 {
 		return model.ErrInvalidParam
 	}
@@ -121,7 +126,7 @@ func (m *mealTeamUsecase) TurnOverMealTeamer(mealTeamId int) (err error) {
 		nextTeamerKey = k + 1
 	}
 
-	if (nextTeamerKey + 1) == len(members) {
+	if (nextTeamerKey + 1) >= len(members) {
 		nextTeamerKey = 0
 	}
 
@@ -175,6 +180,23 @@ func (m *mealTeamUsecase) GetMealTeamManagerRunning(mealTeamId int) (running []m
 			return nil, model.ErrGetMealTeamRestaurant
 		}
 		running[k].Restaurant = restaurant
+	}
+	return
+}
+
+func (m *mealTeamUsecase) GetMealTeamByMemberOpenid(openid string) (mealTeams []model.MealTeam, err error) {
+	if openid == "" {
+		return nil, model.ErrInvalidParam
+	}
+
+	mealTeamIds, err := m.repo.GetMealTeamIdsByOpenid(openid)
+
+	for _, v := range mealTeamIds {
+		mealTeam, err := m.repo.FindMealTeamById(v)
+		if err != nil {
+			return nil, model.ErrGetMealTeam
+		}
+		mealTeams = append(mealTeams, *mealTeam)
 	}
 	return
 }

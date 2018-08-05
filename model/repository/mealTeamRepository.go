@@ -17,4 +17,6 @@ type MealTeamRepository interface {
 	CreateMealTeamMember(mealTeamId int, openid,nick,avatar string, isManager int) (err error)
 
 	CreateMealTeamNotify(mealTeamId int, openid string, result int) (err error)
+
+	GetMealTeamIdsByOpenid(openid string)(mealTeamIds []int, err error)
 }
