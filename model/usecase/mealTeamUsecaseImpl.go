@@ -22,7 +22,7 @@ func (m *mealTeamUsecase) GetALLMealTeamName() (names []string, err error) {
 	return
 }
 
-func (m *mealTeamUsecase) Create(name, openid string) (mealTeam *model.MealTeam, err error) {
+func (m *mealTeamUsecase) Create(name, openid, nick, avatar string) (mealTeam *model.MealTeam, err error) {
 	if name == "" || openid == "" {
 		return nil, model.ErrInvalidParam
 	}
@@ -37,6 +37,11 @@ func (m *mealTeamUsecase) Create(name, openid string) (mealTeam *model.MealTeam,
 
 	if err != nil {
 		return nil, model.ErrCreateMealTeam
+	}
+
+	err = m.repo.CreateMealTeamMember(id, openid, nick, avatar, 1)
+	if err != nil {
+		return nil, model.ErrCreateMealTeamMember
 	}
 	mealTeam.ID = id
 	return

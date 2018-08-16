@@ -5,7 +5,7 @@ import "github.com/gmzhang/meal-team/model"
 type MealTeamUsecase interface {
 	GetALLMealTeamName() (names []string, err error)
 
-	Create(name, openid string) (mealTeam *model.MealTeam, err error)
+	Create(name, openid,nick,avatar string) (mealTeam *model.MealTeam, err error)
 	GetMealTeam(mealTeamId int) (mealTeam *model.MealTeam, err error)
 
 	GetMealTeamMember(mealTeamId int) (members []model.MealTeamMember, err error)

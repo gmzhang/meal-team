@@ -45,12 +45,14 @@ func (h *HttpHandler) CreateMealTeam(c echo.Context) error {
 	postInfo := struct {
 		Name   string `json:"name"`
 		Openid string `json:"openid"`
+		Nick   string `json:"nick"`
+		Avatar string `json:"avatar"`
 	}{}
 
 	if err := c.Bind(&postInfo); err != nil {
 		return c.JSON(http.StatusOK, model.GetErrorMap(err))
 	}
-	mealTeam, err := h.ucase.Create(postInfo.Name, postInfo.Openid)
+	mealTeam, err := h.ucase.Create(postInfo.Name, postInfo.Openid, postInfo.Nick, postInfo.Avatar)
 	result := model.GetErrorMap(err)
 	result["mealTeam"] = mealTeam
 	return c.JSON(http.StatusOK, result)
