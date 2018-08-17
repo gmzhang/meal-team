@@ -18,5 +18,5 @@ type MealTeamRepository interface {
 
 	CreateMealTeamNotify(mealTeamId int, openid string, result int) (err error)
 
-	GetMealTeamIdsByOpenid(openid string)(mealTeamIds []int, err error)
+	GetMealTeamManagersByOpenid(openid string)(mealTeamManagers []model.MealTeamMember, err error)
 }

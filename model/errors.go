@@ -21,7 +21,8 @@ var (
 	ErrUpdateMealTeamMemberIsManager = errors.New("update meal team member is manager error")
 	ErrCreateMealTeamMember          = errors.New("create meal team member error")
 	ErrCreateMealTeamNotify          = errors.New("create meal team notify error")
-	ErrGetMealTeamIdsByOpenid         = errors.New("get meal team ids by openid error")
+	ErrGetMealTeamIdsByOpenid        = errors.New("get meal team ids by openid error")
+	ErrGetMealTeamManagersByOpenid   = errors.New("get meal team managers  by openid error")
 )
 
 func GetErrorCode(err error) int32 {
@@ -54,6 +55,8 @@ func GetErrorCode(err error) int32 {
 		return ErrCodeSegmentBase + 13
 	case ErrGetMealTeamIdsByOpenid:
 		return ErrCodeSegmentBase + 14
+	case ErrGetMealTeamManagersByOpenid:
+		return ErrCodeSegmentBase + 15
 
 	case nil:
 		return ErrCodeOK

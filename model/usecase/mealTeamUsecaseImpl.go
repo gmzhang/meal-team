@@ -189,19 +189,14 @@ func (m *mealTeamUsecase) GetMealTeamManagerRunning(mealTeamId int) (running []m
 	return
 }
 
-func (m *mealTeamUsecase) GetMealTeamByMemberOpenid(openid string) (mealTeams []model.MealTeam, err error) {
+func (m *mealTeamUsecase) GetMealTeamManagersByMemberOpenid(openid string)(managers []model.MealTeamMember, err error) {
 	if openid == "" {
 		return nil, model.ErrInvalidParam
 	}
 
-	mealTeamIds, err := m.repo.GetMealTeamIdsByOpenid(openid)
-
-	for _, v := range mealTeamIds {
-		mealTeam, err := m.repo.FindMealTeamById(v)
-		if err != nil {
-			return nil, model.ErrGetMealTeam
-		}
-		mealTeams = append(mealTeams, *mealTeam)
+	managers, err = m.repo.GetMealTeamManagersByOpenid(openid)
+	if err != nil {
+		return nil, model.ErrGetMealTeamManagersByOpenid
 	}
 	return
 }

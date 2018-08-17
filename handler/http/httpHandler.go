@@ -185,7 +185,7 @@ func (h *HttpHandler) GetMealTeamManagerRunning(c echo.Context) error {
 }
 func (h *HttpHandler) GetMealTeamsByOpenid(c echo.Context) error {
 	openidStr := c.Param("openid")
-	mealTeams, err := h.ucase.GetMealTeamByMemberOpenid(openidStr)
+	mealTeams, err := h.ucase.GetMealTeamManagersByMemberOpenid(openidStr)
 
 	result := model.GetErrorMap(err)
 

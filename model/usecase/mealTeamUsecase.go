@@ -24,5 +24,5 @@ type MealTeamUsecase interface {
 
 	GetMealTeamManagerRunning(mealTeamId int) (running []model.MealTeamManagerRunning, err error)
 
-	GetMealTeamByMemberOpenid(openid string)(mealTeams []model.MealTeam, err error)
+	GetMealTeamManagersByMemberOpenid(openid string)(managers []model.MealTeamMember, err error)
 }

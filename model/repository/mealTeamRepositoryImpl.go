@@ -223,12 +223,12 @@ func (m *mealTeamRepository) CreateMealTeamNotify(mealTeamId int, openid string,
 	return
 }
 
-func (m *mealTeamRepository) GetMealTeamIdsByOpenid(openid string) (mealTeamIds []int, err error) {
+func (m *mealTeamRepository) GetMealTeamManagersByOpenid(openid string)(mealTeamManagers []model.MealTeamMember, err error) {
 
-	sqlStr := "select team_id FROM meal_team_member WHERE openid=? order by id asc"
+	sqlStr := "select id,team_id,is_manager,openid,nick,avatar,up,down FROM meal_team_member WHERE openid=? and is_manager = 1 order by id desc"
 
-	mealTeamIds = []int{}
-	err = m.coon.Select(&mealTeamIds, sqlStr, openid)
+	mealTeamManagers = []model.MealTeamMember{}
+	err = m.coon.Select(&mealTeamManagers, sqlStr, openid)
 	if err == sql.ErrNoRows {
 		err = nil
 	}
