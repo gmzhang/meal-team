@@ -71,7 +71,7 @@ func (m *mealTeamRepository) FindMealTeamById(id int) (mealTeam *model.MealTeam,
 
 func (m *mealTeamRepository) FindMealTeamMemberByMealTeamId(mealTeamId int) (members []model.MealTeamMember, err error) {
 	members = []model.MealTeamMember{}
-	sqlStr := "select id,team_id,restaurant_id,openid,nick,avatar,is_manager,up,down,create_at FROM meal_team_member WHERE team_id=? order by id asc"
+	sqlStr := "select id,team_id,restaurant_id,openid,nick,avatar,is_manager,up,down,create_at FROM meal_team_member WHERE team_id=? order by up desc"
 
 	err = m.coon.Select(&members, sqlStr, mealTeamId)
 	if err == sql.ErrNoRows {
